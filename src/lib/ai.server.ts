@@ -44,7 +44,7 @@ export function normalizeInsights(raw: unknown): GeneratedInsights {
     follow_up_questions: safeArray(obj["follow_up_questions"]),
     action_items: actions
       .slice(0, 25)
-      .map((a) => {
+      .map((a): GeneratedInsights["action_items"][number] => {
         const item = (a ?? {}) as Record<string, unknown>;
         const task = typeof item["task"] === "string" ? (item["task"] as string) : "";
         const priority = item["priority"];
@@ -54,7 +54,7 @@ export function normalizeInsights(raw: unknown): GeneratedInsights {
           assignee: typeof item["assignee"] === "string" ? (item["assignee"] as string) : null,
           due_date: typeof due === "string" && /^\d{4}-\d{2}-\d{2}$/.test(due) ? due : null,
           priority:
-            priority === "low" || priority === "high" || priority === "medium" ? priority : "medium",
+            priority === "low" || priority === "high" ? priority : "medium",
         };
       })
       .filter((a) => a.task.length > 0),
